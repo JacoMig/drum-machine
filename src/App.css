@@ -28,6 +28,70 @@
   color: #61dafb;
 }
 
+.steps-sequencer {
+  position: relative;
+}
+.steps-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width: 500px;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.steps-line {
+  display: flex;
+}
+
+.step {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border: 2px solid black;
+  
+}
+.step.active {
+  background-color: red !Important;
+}
+
+.step.current {
+  border: 2px solid blueviolet;
+  background-color: blueviolet;
+}
+
+.instrument-rack {
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: space-around;
+  height: 300px;
+}
+
+.instrument {
+  height: 100%
+}
+
+.instrument > div {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+input[type=range].range-slider {
+  height: 100% !important;
+  transform: rotateZ(-90deg);
+}
+
+.button-mute.mute {
+  background-color: crimson;
+}
+
+.Level-container {
+  position: relative;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
