@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: gold;
+  padding: 20px;
 }
 
 .App-logo {
@@ -47,9 +51,10 @@
 
 .step {
   width: 30px;
-  height: 30px;
+  height: 50px;
   background-color: white;
   border: 2px solid black;
+  border-radius: 6px;
   
 }
 .step.active {
@@ -61,28 +66,60 @@
   background-color: blueviolet;
 }
 
+.main-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
 .instrument-rack {
-  margin-bottom: 50px;
   display: flex;
   justify-content: space-around;
   height: 300px;
 }
 
 .instrument {
-  height: 100%
+  height: 100%;
+  width: 100px;
+  border: 1px solid black;
+  margin-right: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in;
+}
+
+.instrument.selected {
+  box-shadow: 0px 3px 7px darkgreen
+}
+
+.instrument.selected .select-button {
+  background: greenyellow;
 }
 
 .instrument > div {
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+.instrument .name {
+  z-index: 200;
+  color: white;
+}
+input[type=range].range-slider {
+  z-index: 100;
+  transform: rotateZ(-90deg);
 }
 
-input[type=range].range-slider {
-  height: 100% !important;
-  transform: rotateZ(-90deg);
+
+
+.select-button {
+  width: 20px;
+  padding: 10px;
+  background: white;
+  border: none;
 }
 
 .button-mute.mute {
@@ -90,7 +127,44 @@ input[type=range].range-slider {
 }
 
 .Level-container {
-  position: relative;
+ /*  position: relative; */
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controls button, .controls button:focus, .controls button:active{
+  border: none;
+  outline: none
+}
+
+.controls input {
+  background: transparent;
+  border-bottom: 1px solid black;
+  border-left: none;
+  border-top: none;
+  border-right: 0;
+  outline: none;
+}
+
+.controls button{ 
+  background-color: transparent;
+  font-size: 53px;
+  margin-bottom: 25px;
+}
+
+div[id*='meter-']{
+  width: 30px;
+    height: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    /* display: none; */
+    margin: 0 auto;
 }
 
 @keyframes App-logo-spin {

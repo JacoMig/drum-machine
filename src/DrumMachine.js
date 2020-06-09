@@ -30,11 +30,6 @@ const DrumMachine = () => {
     stepsRef.current = steps; 
     const currentStepRef = useRef(currentStep);
     currentStepRef.current = currentStep;
-    /* const currentInstrumentRef = useRef(currentInstrument) 
-    currentInstrumentRef.current = currentInstrument */
-
-     /* const soundRef = useRef(sound)
-     soundRef.current = sound */
     
     useEffect(() => {
        
@@ -78,24 +73,25 @@ const DrumMachine = () => {
     },[bpm])
 
     useEffect(() => {
-       console.log('steps', steps) 
+      // console.log('steps', steps) 
     })
 
     return (
         <>
             {/* console.log(currentStep) */}
-            <Controls 
-                setPlayStop={() => {
-                    setPlayStop(state => !state)
-                }} 
-                playStop={playStop} 
-                setBpm={setBpm}
-                bpm={bpm}/>
-            <InstrumentRack 
-                samples={samples}
-                setBuffers={setBuffers} 
-                toggleInstrument={toggleInstrument}
-            />
+            <div className="main-body">
+                <InstrumentRack 
+                    samples={samples}
+                    setBuffers={setBuffers} 
+                    toggleInstrument={toggleInstrument}
+                    currentInstrument={currentInstrument}
+                />
+                <Controls 
+                    setPlayStop={() => setPlayStop(state => !state)} 
+                    playStop={playStop} 
+                    setBpm={setBpm}
+                    bpm={bpm}/>
+            </div>
             <div className="steps-sequencer">
                 <div className="step-container">
                     <Step 
