@@ -5,24 +5,29 @@ import InstrumentRack from './InstrumentRack'
 import samples from './samples.json'
 import Step from './Step'
 
-const initialStepState = {
-    kick: [false, false, false, false, false, false,false,false,false,false,false,false,false,false,false,false],
-    hihat: [false, false, false, false, false, false,false,false,false,false,false,false,false,false,false,false],
-};
+const initialStepPattern = [false, false, false, false, false, false,false,false,false,false,false,false,false,false,false,false]
 
-let mycurrentstep = 0
+const initialStepState = () => {
+    let stepsObj = {}          
+    Object.keys(samples).map(key => {
+        stepsObj = {...stepsObj, [key]: initialStepPattern } 
+    })
+    return stepsObj
+};  
 
 const DrumMachine = () => {
-    const [steps, setSteps] = useState(initialStepState)
-    const [currentStep, setCurrentStep] = useState(0);
+    
+    const [steps, setSteps] = useState(initialStepState) 
+    const [currentStep, setCurrentStep] = useState(-1);
     const [buffers, setBuffers] = useState({})
     const [playStop, setPlayStop] = useState(false)
-    const [currentInstrument, setCurrentInstrument] = useState({kick: []})
+    const [currentInstrument, setCurrentInstrument] = useState('kick')
+    const [bpm, setBpm] = useState(120)
     
     const buffersRef = useRef(buffers);
     buffersRef.current = buffers;
     const stepsRef = useRef(steps);
-    stepsRef.current = steps;
+    stepsRef.current = steps; 
     const currentStepRef = useRef(currentStep);
     currentStepRef.current = currentStep;
     /* const currentInstrumentRef = useRef(currentInstrument) 
@@ -32,10 +37,7 @@ const DrumMachine = () => {
      soundRef.current = sound */
     
     useEffect(() => {
-        // const mySound = new Tone.Player("https://raw.githubusercontent.com/kenwheeler/hooks-drum-machine/master/public/sounds/kick.wav").toMaster()
        
-        // console.log(new Tone.Synth())
-        setCurrentInstrument({kick: steps['kick']})
         Tone.Transport.scheduleRepeat(function(time) {
             
             setCurrentStep(step => {
@@ -52,30 +54,32 @@ const DrumMachine = () => {
             // synth.triggerAttackRelease('C3', '8n')
            
         }, "16n");
-        
         //  console.log(buffersRef.current)
 
     }, []);
 
-    const toggleStep = (s, i) => {
-        let newSteps = currentInstrument
-        newSteps[s][i] = !newSteps[s][i] 
-        setSteps({...steps, ...newSteps})
-        console.log(stepsRef.current)
+    const toggleStep = (i) => {
+        setSteps((step) => ({
+            ...steps,
+            [currentInstrument]: steps[currentInstrument].map((s,index) => index === i ? !s : s )    
+        }))
     }
 
     const toggleInstrument = (name) => {
-        setCurrentInstrument({[name]: steps[name]})
-
+        setCurrentInstrument(name)
     }
-
-    useEffect(() => {
-      //  console.log(currentInstrument)
-    })
 
     useEffect(() => {
         playStop ? Tone.Transport.start() : Tone.Transport.stop()
     }, [playStop]) 
+
+    useEffect(() => {
+        Tone.Transport.bpm.value = bpm
+    },[bpm])
+
+    useEffect(() => {
+       console.log('steps', steps) 
+    })
 
     return (
         <>
@@ -84,23 +88,23 @@ const DrumMachine = () => {
                 setPlayStop={() => {
                     setPlayStop(state => !state)
                 }} 
-                playStop={playStop} />
-            <div className="steps-sequencer">
-                <div className="step-container">
-                    {Object.keys(currentInstrument).map(s => (
-                        <Step 
-                            key={s}
-                            currentStep={currentStep}
-                            steps={currentInstrument[s]} 
-                            toggleStep={(i) => toggleStep(s, i)} />
-                    ))}
-                </div>
-            </div>  
+                playStop={playStop} 
+                setBpm={setBpm}
+                bpm={bpm}/>
             <InstrumentRack 
                 samples={samples}
                 setBuffers={setBuffers} 
                 toggleInstrument={toggleInstrument}
-            /> 
+            />
+            <div className="steps-sequencer">
+                <div className="step-container">
+                    <Step 
+                        currentStep={currentStep}
+                        steps={steps[currentInstrument]} 
+                        name={currentInstrument}
+                        toggleStep={(i) => toggleStep(i)} />
+                </div>
+            </div>
         </>
     );
 }

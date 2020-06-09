@@ -42,6 +42,7 @@
 
 .steps-line {
   display: flex;
+  justify-content: space-between;
 }
 
 .step {

@@ -17,8 +17,8 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument}) => {
     let [delay, setDelay] = useState(null)
     let [delayWet, setDelayWet] = useState(0)
     
-    const muteRef = useRef(mute)
-    muteRef.current = mute
+    /* const muteRef = useRef(mute)
+    muteRef.current = mute */
 
     /* const SoundREF = useRef(Sound)
     SoundREF.current = Sound */
@@ -29,11 +29,11 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument}) => {
     const delayRef = useRef(delay)
     delayRef.current = delay;
 
-    const delayWetRef = useRef(delayWet)
+    /* const delayWetRef = useRef(delayWet)
     delayWetRef.current = delayWet
 
     const volumeRef = useRef(volumeValue)
-    volumeRef.current = volumeValue
+    volumeRef.current = volumeValue */
 
     async function loadingStuff(){
         Nexus._context = Tone.context
@@ -65,22 +65,33 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument}) => {
         
     })
 
-    async function onVolumeChange(val) {
+    /* async function onVolumeChange(val) {
         const value = parseInt(val); 
         await setVolumeValue(value)
-        if(!muteRef.current){
+        if(!mute){
             channel.volume.value = volumeRef.current 
         }
        
-    }
+    } */
 
-    async function toggleMute  () {
-        await setMute(state => !state)
-        if(muteRef.current){
-            channel.volume.value = volumeRef.current 
-        } 
-        channel.mute = muteRef.current
-    }
+    useEffect(() => {
+        if(channel){
+            !mute ? channel.volume.value = volumeValue  : channel.volume.value = -100
+        }
+    }, [volumeValue])
+
+    useEffect(() => {
+        if(channel){
+            mute ? channel.volume.value = -100 : channel.volume.value = volumeValue
+            channel.mute = mute
+        }
+    }, [mute])
+
+    useEffect(() => {
+        if(delay){
+            delay.wet.value = delayWet
+        }
+    }, [delayWet])
 
     Knob.defaultProps = {
         size: 150,
@@ -91,10 +102,10 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument}) => {
         value: 0
     };
 
-    async function handleDelayWet (val) {
+    /* async function handleDelayWet (val) {
         await setDelayWet(val/10)
         delay.wet.value = val/10
-    }
+    } */
     
     return (
         <div className={`${name}`}>
@@ -105,10 +116,10 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument}) => {
                     max={8}
                     value={volumeValue}
                     tooltip={'off'}
-                    onChange={e => onVolumeChange(e.target.value)} />  
+                    onChange={e => setVolumeValue(parseInt(e.target.value))} />  
                <div id={`meter-${name}`}></div>
             </div>
-            <button onClick={toggleMute} className={`button-mute ${muteRef.current ? 'mute' : ''}`}>Mute</button>
+            <button onClick={() => setMute(state => !state)} className={`button-mute ${mute ? 'mute' : ''}`}>Mute</button>
             <Knob
                 numTicks={25}
                 degrees={180}
@@ -116,7 +127,7 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument}) => {
                 max={100}
                 value={0}
                 size={30}
-                onChange={(val) => handleDelayWet(val)}
+                onChange={(val) => setDelayWet(val/10)}
             />
         </div>
     )

@@ -1,11 +1,17 @@
 
-    {
-        "kick": {
-            "url": "/samples/kick.wav"
-        },
-        "hihat": {
-            "url": "/samples/hihat.wav"
-        }
+{
+    "kick": {
+        "url": "/samples/kick.wav"
+    },
+    "hihat": {
+        "url": "/samples/hihat.wav"
+    },
+    "openhihat": {
+        "url": "/samples/openhihat.wav"
+    },
+    "snare": {
+        "url": "/samples/snare.wav"
     }
+}
     
 
