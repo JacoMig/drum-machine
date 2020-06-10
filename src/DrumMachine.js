@@ -4,6 +4,7 @@ import Controls from './Controls'
 import InstrumentRack from './InstrumentRack'
 import samples from './samples.json'
 import Step from './Step'
+import FxCollector from './FxCollector'
 
 const initialStepPattern = [false, false, false, false, false, false,false,false,false,false,false,false,false,false,false,false]
 
@@ -32,25 +33,16 @@ const DrumMachine = () => {
     currentStepRef.current = currentStep;
     
     useEffect(() => {
-       
         Tone.Transport.scheduleRepeat(function(time) {
-            
             setCurrentStep(step => {
                 return step < 15 ? (step += 1) : 0;
             }); 
-            
             Object.keys(buffersRef.current).map(key => {
                 if(stepsRef.current[key][currentStepRef.current]){
                     buffersRef.current[key].start(time)
-                    
                 } 
             })
-            
-            // synth.triggerAttackRelease('C3', '8n')
-           
         }, "16n");
-        //  console.log(buffersRef.current)
-
     }, []);
 
     const toggleStep = (i) => {
@@ -86,11 +78,15 @@ const DrumMachine = () => {
                     toggleInstrument={toggleInstrument}
                     currentInstrument={currentInstrument}
                 />
-                <Controls 
-                    setPlayStop={() => setPlayStop(state => !state)} 
-                    playStop={playStop} 
-                    setBpm={setBpm}
-                    bpm={bpm}/>
+                <div className="master">
+                    <Controls 
+                        setPlayStop={() => setPlayStop(state => !state)} 
+                        playStop={playStop} 
+                        setBpm={setBpm}
+                        bpm={bpm}
+                    />
+                    <FxCollector />
+                </div>
             </div>
             <div className="steps-sequencer">
                 <div className="step-container">

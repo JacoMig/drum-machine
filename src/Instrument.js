@@ -7,18 +7,10 @@ import RangeSlider from 'react-bootstrap-range-slider';
 // import styled from 'styled-components'
 import Nexus from 'nexusui'
 import FxSelector from './FxSelector'
-import FxControls from './FxControls'
+import FxSend from './FxSend'
 import BottomButtons from './BottomButtons'
+import {FxTypes} from './utils/effects'
 
-
-const FxTypes = {
-    delay: new Tone.FeedbackDelay({delayTime: "4n", feedback: 0.1, wet: 0}),
-    phaser: new Tone.Phaser({
-        frequency : 0,
-        octaves : 5,
-        baseFrequency : 1000
-    })
-}
 
 const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
     // const volumeRef = createRef()
@@ -27,14 +19,17 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
     let [channel, setChannel] = useState()
     let [Sound, setSound] = useState()
     
+    let [channelSend, setChannelSend] = useState({})
     /* let [delay, setDelay] = useState(null)
     let [delayWet, setDelayWet] = useState(0) */
     
     let [Fx, setFx] = useState({})
-
+    
     const channelRef = useRef(channel)
     channelRef.current = channel
 
+    /* const FxREF = useRef(Fx)
+    FxREF.current = Fx */
     /* const delayRef = useRef(delay)
     delayRef.current = delay; */
 
@@ -47,8 +42,10 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
         meter.colorize("accent","green")   
         await setChannel(new Tone.Channel({volume: -2}).toMaster())
         meter.connect(channelRef.current, 2)
-        
-        // setDelay(new Tone.FeedbackDelay({delayTime: "4n", feedback: 0.1, wet: delayWet}).connect(channelRef.current))
+
+        Object.keys(FxTypes).map(FxSend => {
+            setChannelSend(state => ({...state, [FxSend+name]: channelRef.current.send(FxSend, -Infinity)}))
+        })
         const Buffer = new Tone.Buffer(process.env.PUBLIC_URL + buffer, () => {
             setSound(new Tone.Player(Buffer.get()).connect(channelRef.current))
         })
@@ -84,23 +81,15 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
         }
     }, [mute])
 
-    /* useEffect(() => {
-        if(delay){
-            delay.wet.value = delayWet
-        }
-    }, [delayWet]) */
 
     useEffect(() => {
-        if(channel && Sound){
-            Object.keys(Fx).map(name => {
-                Sound.connect(Fx[name])
-                Fx[name].connect(channel)
-                channel.volume.value =  volumeValue-4
-            })
-        }
-    }, [Fx])
+        Object.keys(Fx).map(FxSend => {
+            channelSend[FxSend+name].gain.value = Fx[FxSend]
+            console.log(channelSend[FxSend+name].gain.value)
+        })  
+    }, [Fx]) 
 
-   const removeFx = (name) => {
+   /* const removeFx = (name) => {
         Object.keys(Fx).map(name => {
             Sound.disconnect(Fx[name])
             Fx[name].disconnect(channel)
@@ -111,7 +100,7 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
             delete newFx[name]
             return {...newFx}
         }) 
-   } 
+   }  */
 
     return (
         <div className={`instrument ${selected ? 'selected' : ''}`}>
@@ -127,17 +116,22 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
                 <FxSelector 
                     FxTypes={FxTypes} 
                     setFx={setFx} />
-                <FxControls 
-                    Fx={Fx} 
-                    setFx={setFx}
-                    removeFx={(name) => removeFx(name)} 
-                    channel={channel} />
+                {Object.keys(Fx).length > 0 && 
+                    <div className="sender">
+                        {Object.keys(Fx).map(fxName => 
+                            <FxSend 
+                                key={fxName}
+                                fxName={fxName} 
+                                setFx={setFx}
+                                // removeFx={(name) => removeFx(name)} 
+                        /> )}
+                    </div>
+                }
                 <BottomButtons 
                     setMute={setMute} 
                     mute={mute} 
                     selected={selected} 
                     toggleInstrument={() => toggleInstrument(name)} />
-                
             </div>
         </div>
     )

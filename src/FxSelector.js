@@ -16,7 +16,7 @@ const FxSelector = ({setFx, FxTypes}) => {
 
     const handleChooseFx = (fxName) => {
         if(fxName !== 'none')
-            setFx((state) => ({...state, [fxName]: FxTypes[fxName] }))
+            setFx((state) => ({...state, [fxName]: 0 }))
     }
 
     return (
@@ -25,8 +25,7 @@ const FxSelector = ({setFx, FxTypes}) => {
                 <Select defaultValue="none" onChange={(e) => handleChooseFx(e.target.value)}>
                     <option value="none">Choose FX</option>
                     {fxLabels.map(fx => <option key={fx} value={fx}>{fx}</option>)}
-                </Select>
-            }
+                </Select>}
         </>
     )
 }
