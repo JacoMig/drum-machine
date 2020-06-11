@@ -3,7 +3,7 @@
   max-width: 600px;
   margin: 0 auto;
   background-color: gold;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 .App-logo {
@@ -69,7 +69,6 @@
 .main-body {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding-bottom: 20px;
 }
 
@@ -114,16 +113,12 @@ input[type=range].range-slider {
 }
 
 .fx-wrapper {
-  border-radius: 5px;
-  border: 2px solid white;
+  border: 1px solid white;
   background: #888;
-  position: absolute;
+  
   color: white;
-  top: 0;
-  width: 381px;
   height: 125px;
-  z-index: 300;
-  left: 0;
+  
 }
 
 .fx-button {
@@ -134,13 +129,26 @@ input[type=range].range-slider {
   color: white;
 }
 
-.sender {
-  display: flex;
+.fx-collector-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-.sender > div:not(:nth-child(2n)){ 
-  padding-right: 15px;
+
+.sender {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+/* .sender > div:not(:nth-child(2n)){ 
+  padding-right: 15px;
+} */
 
 .sender span{ 
   font-size: 12px;

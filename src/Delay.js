@@ -11,19 +11,20 @@ const Rack = styled.div`
     justify-content: space-around;
 `
 
-const Delay = ({FX}) => {
+const Delay = ({FX, params, setParams}) => {
     const [name, setName] = useState()
-    const [open, setOpen] = useState(false)
-
-    const [values, setValues] = useState({})
+   // const [open, setOpen] = useState(false)
+    const paramsREF = useRef(params)
+    paramsREF.current = params
+    /* const [values, setValues] = useState({})
 
     const valuesREF = useRef(values)
-    valuesREF.current = values
+    valuesREF.current = values */
    
 
     useEffect(() => {
         setName(Object.keys(FX)[0])
-        setValues({feedback: -0.1, delayTime: -0.1})
+       // setValues({feedback: -0.1, delayTime: -0.1})
         
         Knob.defaultProps = {
             size: 150,
@@ -48,12 +49,14 @@ const Delay = ({FX}) => {
         
         switch(prop){
             case 'feedback':
-                setValues(state => ({...state, feedback: val/10}))
-                FX[name].feedback.value = valuesREF.current.feedback;
+               // setValues(state => ({...state, feedback: val/10}))
+                setParams(state => ({...state, [name]: {...state[name], params: {...state[name].params, feedback: val/10} } }))
+                FX[name].feedback.value = paramsREF.current.feedback;
             break;
             case 'delayTime':
-                setValues(state => ({...state, delayTime: val/10.5}))
-                FX[name].delayTime.value = 1 - valuesREF.current.delayTime
+                // setValues(state => ({...state, delayTime: val/10.5}))
+                setParams(state => ({...state, [name]: {...state[name], params: {...state[name].params, delayTime: val/10.5} } }))
+                FX[name].delayTime.value = 1 - paramsREF.current.delayTime
             break;
         } 
         
@@ -61,13 +64,13 @@ const Delay = ({FX}) => {
     
     return (
         <>
-            <FX_Button className="fx-button" onClick={() => setOpen(state => !state)}>
+            {/* <FX_Button className="fx-button" onClick={() => setOpen(state => !state)}>
                 {name}
-            </FX_Button>
-            {open &&
+            </FX_Button> */}
+            
                 <FX_Wrapper className="fx-wrapper">
                     <span>{name}</span>
-                    <span onClick={() => setOpen(false)}>X</span>
+                    <span onClick={() =>null}>X</span>
                     <Rack>
                         <div>
                             <h4>Feedback</h4>
@@ -77,8 +80,8 @@ const Delay = ({FX}) => {
                                 degrees={180}
                                 min={0}
                                 max={10}
-                                value={values.feedback}
-                                size={30}
+                                value={params.feedback}
+                                size={35}
                                 onChange={(val) => handleChangeKnob(val, 'feedback')}
                             />
                         </div>
@@ -90,7 +93,7 @@ const Delay = ({FX}) => {
                                 degrees={180}
                                 min={0}
                                 max={10}
-                                value={values.delayTime}
+                                value={params.delayTime}
                                 size={30}
                                 onChange={(val) => handleChangeKnob(val, 'delayTime')}
                             />
@@ -98,7 +101,7 @@ const Delay = ({FX}) => {
                     </Rack>
                    
                 </FX_Wrapper>
-            }
+        
         </>
     )
 }

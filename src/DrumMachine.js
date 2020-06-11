@@ -24,7 +24,9 @@ const DrumMachine = () => {
     const [playStop, setPlayStop] = useState(false)
     const [currentInstrument, setCurrentInstrument] = useState('kick')
     const [bpm, setBpm] = useState(120)
-    
+    const [volume, setVolume] = useState(30)
+    const minVolume = -40;
+
     const buffersRef = useRef(buffers);
     buffersRef.current = buffers;
     const stepsRef = useRef(steps);
@@ -43,6 +45,7 @@ const DrumMachine = () => {
                 } 
             })
         }, "16n");
+        setVolume(minVolume + volume)
     }, []);
 
     const toggleStep = (i) => {
@@ -65,6 +68,10 @@ const DrumMachine = () => {
     },[bpm])
 
     useEffect(() => {
+        Tone.Master.volume.value = volume
+    },[volume])
+
+    useEffect(() => {
       // console.log('steps', steps) 
     })
 
@@ -79,11 +86,15 @@ const DrumMachine = () => {
                     currentInstrument={currentInstrument}
                 />
                 <div className="master">
+                    <h3>Master</h3>
                     <Controls 
                         setPlayStop={() => setPlayStop(state => !state)} 
                         playStop={playStop} 
                         setBpm={setBpm}
                         bpm={bpm}
+                        volume={volume}
+                        minVolume={minVolume}
+                        setVolume={setVolume}
                     />
                     <FxCollector />
                 </div>

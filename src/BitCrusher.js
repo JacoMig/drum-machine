@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import Knob from './Knob'
 
-const FX_Button = styled.div``
 const FX_Wrapper = styled.div``
 
 const Rack = styled.div`
@@ -11,62 +10,66 @@ const Rack = styled.div`
     justify-content: space-around;
 `
 
-const BitCrusher = ({FX}) => {
+const BitCrusher = ({FX, params, setParams}) => {
+    const maxVal = 8
     const [name, setName] = useState()
-    const [open, setOpen] = useState(false)
-
-    const [values, setValues] = useState({})
+    /* const [values, setValues] = useState({})
 
     const valuesREF = useRef(values)
-    valuesREF.current = values
-   
+    valuesREF.current = values */
 
+    const paramsREF = useRef(params)
+    paramsREF.current = params
+
+    const nameREF = useRef(name)
+    nameREF.current = name
+   
     useEffect(() => {
         setName(Object.keys(FX)[0])
-        setValues({bits: 0})
+        // setValues({bits: 0})
+        if(nameREF.current){
+            FX[nameREF.current].bits = maxVal - params.bits;
+        }
         
-       
+        console.log(params)
     }, [])
 
     useEffect(() => {
         if(name){
+            FX[name].bits = maxVal;
             FX[name].receive(name).toMaster()
         }
     }, [name])
     
     const handleChangeKnob = (val) => {
-        setValues(state => ({bits: val}))
-        FX[name].bits = valuesREF.current.bits;
-        
+        //setValues({bits: val})
+        setParams({bits: val})
+        FX[name].bits = maxVal - paramsREF.current.bits;
     }
     
     return (
         <>
-            <FX_Button className="fx-button" onClick={() => setOpen(state => !state)}>
-                {name}
-            </FX_Button>
-            {open &&
-                <FX_Wrapper className="fx-wrapper">
-                    <span>{name}</span>
-                    <span onClick={() => setOpen(false)}>X</span>
-                    <Rack>
-                        <div>
-                            <h4>Bits</h4>
-                            <Knob
-                                numTicks={8}
-                                degrees={180}
-                                min={0}
-                                max={8}
-                                value={values.bits}
-                                size={30}
-                                onChange={(val) => handleChangeKnob(val)}
-                            />
-                        </div>
-                       
-                    </Rack>
-                   
-                </FX_Wrapper>
-            }
+            {/* console.log(values) */}
+        
+            <FX_Wrapper className="fx-wrapper">
+                <span>{name}</span>
+                <span onClick={() => null}>X</span>
+                <Rack>
+                    <div>
+                        <h4>Bits</h4>
+                        <Knob
+                            numTicks={8}
+                            degrees={220}
+                            min={1}
+                            max={8}
+                            value={params.bits}
+                            size={35}
+                            onChange={(val) => handleChangeKnob(val)}
+                        />
+                    </div>
+                </Rack>
+            </FX_Wrapper>
+        
         </>
     )
 }
