@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Knob from './Knob'
 
 const FxSend = ({fxName, setFx}) => {
-    const minVal = -100;
+    const minVal = -80;
     const [sendValue, setSendValue] = useState(0)
     const sendValueREF = useRef(sendValue)
     sendValueREF.current = sendValue
@@ -31,7 +31,7 @@ const FxSend = ({fxName, setFx}) => {
                     numTicks={10}
                     degrees={220}
                     min={0}
-                    max={100} 
+                    max={minVal*-1} 
                     value={sendValue}
                     size={35}
                     onChange={(val) => handleChangeKnob(val)}

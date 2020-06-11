@@ -5,7 +5,7 @@ import InstrumentRack from './InstrumentRack'
 import samples from './samples.json'
 import Step from './Step'
 import FxCollector from './FxCollector'
-
+// import {round} from './utils/util'
 const initialStepPattern = [false, false, false, false, false, false,false,false,false,false,false,false,false,false,false,false]
 
 const initialStepState = () => {
@@ -70,7 +70,7 @@ const DrumMachine = () => {
 
     useEffect(() => {
         Tone.Master.volume.value = volume
-        console.log(Tone.Master.volume.value)
+      //  console.log(Tone.Master.volume.value)
     },[volume])
 
     useEffect(() => {

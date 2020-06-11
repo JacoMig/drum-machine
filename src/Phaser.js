@@ -54,7 +54,7 @@ const Phaser = ({FX, params, setParams}) => {
                             degrees={220}
                             min={0}
                             max={4000}
-                            value={params.frequency}
+                            value={params.frequency*10}
                             size={35}
                             onChange={(val) => handleChangeKnob(val, 'frequency')}
                         />

@@ -23,6 +23,7 @@ const Delay = ({FX, params, setParams}) => {
             FX[name].feedback.value = params.feedback;
             FX[name].delayTime.value = params.delayTime;
             FX[name].receive(name).toMaster()
+            console.log('Delay', name)
         } 
         console.log(name, 'mount')
         console.log(name+' params', params)
@@ -72,7 +73,7 @@ const Delay = ({FX, params, setParams}) => {
                             degrees={220}
                             min={0}
                             max={10}
-                            value={params.feedback}
+                            value={params.feedback*10}
                             size={35}
                             onChange={(val) => handleChangeKnob(val, 'feedback')}
                         />
@@ -84,7 +85,7 @@ const Delay = ({FX, params, setParams}) => {
                             degrees={220}
                             min={0}
                             max={10}
-                            value={params.delayTime}
+                            value={params.delayTime*10.5}
                             size={35}
                             onChange={(val) => handleChangeKnob(val, 'delayTime')}
                         />
