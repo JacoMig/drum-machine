@@ -45,6 +45,7 @@ const DrumMachine = () => {
                 } 
             })
         }, "16n");
+        var limiter = new Tone.Limiter(-40).toMaster();
         setVolume(minVolume + volume)
     }, []);
 
@@ -69,6 +70,7 @@ const DrumMachine = () => {
 
     useEffect(() => {
         Tone.Master.volume.value = volume
+        console.log(Tone.Master.volume.value)
     },[volume])
 
     useEffect(() => {

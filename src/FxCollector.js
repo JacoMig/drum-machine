@@ -18,15 +18,22 @@ const FxCollector = () => {
         setParams(() => {
             let paramsObj = {}
             Object.keys(FxTypes).map(name => {
+                // FxTypes[name].tone.receive(name).toMaster()
                 paramsObj = {...paramsObj, [name]: {...FxTypes[name].params} }
             })
             return paramsObj
         }) 
     }, [])
 
+    /* useEffect(() => {
+        if(Object.keys(fx).length > 0){
+            Object.keys(fx).map()
+        }
+    }, [fx]) */
+
     useEffect(() => {
-        console.log(params)
-    })
+       console.log(params)
+    }, [params])
 
     return (
         <>
@@ -38,11 +45,11 @@ const FxCollector = () => {
                     {Object.keys(fx).map(name => 
                         {   
                             if(name === 'delay'){
-                                return <Delay key={name} setParams={setParams} params={{...fx[name].params}} FX={{[name]: fx[name].tone}} >{name}</Delay>
+                                return <Delay key={name} setParams={setParams} params={{...params[name]}} FX={{[name]: fx[name].tone}} >{name}</Delay>
                             }else if(name === 'phaser') {
-                                return <Phaser key={name} setParams={setParams} params={{...fx[name].params}} FX={{[name]: fx[name].tone}} >{name}</Phaser>
+                                return <Phaser key={name} setParams={setParams} params={{...params[name]}} FX={{[name]: fx[name].tone}} >{name}</Phaser>
                             } if(name === 'bitCrusher'){
-                                return <BitCrusher key={name} setParams={setParams} params={{...fx[name].params}} FX={{[name]: fx[name].tone} } >{name}</BitCrusher>
+                                return <BitCrusher key={name} setParams={setParams} params={{...params[name]}} FX={{[name]: fx[name].tone} } >{name}</BitCrusher>
                             }
                         }
                     )}

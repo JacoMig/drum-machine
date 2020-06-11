@@ -2,9 +2,6 @@ import React, {useState, useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import Knob from './Knob'
 
-const FX_Button = styled.div``
-const FX_Wrapper = styled.div``
-
 const Rack = styled.div`
     display: flex;
     align-items: center;
@@ -12,57 +9,49 @@ const Rack = styled.div`
 `
 
 const Phaser = ({FX, params, setParams}) => {
-    const [name, setName] = useState()
-   // const [open, setOpen] = useState(false)
-
-    //const [values, setValues] = useState({})
-
-   /*  const valuesREF = useRef(values)
-    valuesREF.current = values */
+    const [name, setName] = useState(Object.keys(FX)[0])
    
-    const paramsREF = useRef(params)
-    paramsREF.current = params
-
-    useEffect(() => {
-        setName(Object.keys(FX)[0])
-       // setValues({frequency: 0, octaves: 0})
-    }, [])
-
+   
     useEffect(() => {
         if(name){
+            // FX[name].bits = maxVal - params.bits;
+            FX[name].set('frequency', params.frequency)
+            FX[name].set('octaves', params.octaves)
             FX[name].receive(name).toMaster()
-        }
-    }, [name])
+        } 
+        console.log(name, 'mount')
+        console.log(name+' params', params)
+        return (() => {
+            console.log(name, 'unmount')
+        })
+    }, [])
+
+   
     
     const handleChangeKnob = (val, prop) => {
         switch(prop){
             case 'frequency':
-                setParams(state => ({...state, [name]: {...state[name], params: {...state[name].params, frequency: val/10} } }))
-                FX[name].set('frequency', paramsREF.current.frequency)
+               setParams(state => ( { ...state, [name]: { ...state[name], [prop]: val/10} } )) 
+               FX[name].set('frequency', params[prop])
             break;
             case 'octaves':
-                // setValues(state => ({...state, octaves: val}))
-                setParams(state => ({...state, [name]: {...state[name], params: {...state[name].params, octaves: val} } }))
-                FX[name].set('octaves', paramsREF.current.octaves)
+                setParams(state => ( { ...state, [name]: { ...state[name], [prop]: val} } ))
+                FX[name].set('octaves', params[prop])
             break;
         } 
     }
     
     return (
         <>
-           {/*  <FX_Button className="fx-button" onClick={() => setOpen(state => !state)}>
-                {name}
-            </FX_Button> */}
-            
-            <FX_Wrapper className="fx-wrapper">
+            <div className="fx-wrapper">
                 <span>{name}</span>
                 <span onClick={() => null}>X</span>
                 <Rack>
                     <div>
                         <h4>Frequency</h4>
                         <Knob
-                            numTicks={40}
-                            degrees={250}
+                            numTicks={8}
+                            degrees={220}
                             min={0}
                             max={4000}
                             value={params.frequency}
@@ -74,7 +63,7 @@ const Phaser = ({FX, params, setParams}) => {
                         <h4>Octaves</h4>
                         <Knob
                             numTicks={8}
-                            degrees={180}
+                            degrees={220}
                             min={0}
                             max={8}
                             value={params.octaves}
@@ -95,7 +84,7 @@ const Phaser = ({FX, params, setParams}) => {
                         />
                     </div> */}
                 </Rack>
-            </FX_Wrapper>
+            </div>
             
         </>
     )

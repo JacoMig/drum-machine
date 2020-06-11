@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import Knob from './Knob'
 
-const FX_Wrapper = styled.div``
+
 
 const Rack = styled.div`
     display: flex;
@@ -12,38 +12,29 @@ const Rack = styled.div`
 
 const BitCrusher = ({FX, params, setParams}) => {
     const maxVal = 8
-    const [name, setName] = useState()
-    /* const [values, setValues] = useState({})
-
-    const valuesREF = useRef(values)
-    valuesREF.current = values */
-
+    const [name, setName] = useState(Object.keys(FX)[0])
+    
     const paramsREF = useRef(params)
     paramsREF.current = params
 
-    const nameREF = useRef(name)
-    nameREF.current = name
-   
-    useEffect(() => {
-        setName(Object.keys(FX)[0])
-        // setValues({bits: 0})
-        if(nameREF.current){
-            FX[nameREF.current].bits = maxVal - params.bits;
-        }
-        
-        console.log(params)
-    }, [])
-
     useEffect(() => {
         if(name){
-            FX[name].bits = maxVal;
+            FX[name].bits = maxVal - params.bits;
             FX[name].receive(name).toMaster()
-        }
-    }, [name])
+        } 
+        console.log(name, 'mount')
+        console.log(name+' params', params)
+        return (() => {
+            console.log(name, 'unmount')
+        })
+        
+    }, [])
+
+   
     
     const handleChangeKnob = (val) => {
-        //setValues({bits: val})
-        setParams({bits: val})
+        setParams(state => ( { ...state, [name]: {bits: val} } ))
+        // console.log(paramsREF.current)
         FX[name].bits = maxVal - paramsREF.current.bits;
     }
     
@@ -51,7 +42,7 @@ const BitCrusher = ({FX, params, setParams}) => {
         <>
             {/* console.log(values) */}
         
-            <FX_Wrapper className="fx-wrapper">
+            <div className="fx-wrapper">
                 <span>{name}</span>
                 <span onClick={() => null}>X</span>
                 <Rack>
@@ -60,7 +51,7 @@ const BitCrusher = ({FX, params, setParams}) => {
                         <Knob
                             numTicks={8}
                             degrees={220}
-                            min={1}
+                            min={0}
                             max={8}
                             value={params.bits}
                             size={35}
@@ -68,7 +59,7 @@ const BitCrusher = ({FX, params, setParams}) => {
                         />
                     </div>
                 </Rack>
-            </FX_Wrapper>
+            </div>
         
         </>
     )

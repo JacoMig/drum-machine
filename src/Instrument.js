@@ -90,7 +90,7 @@ const Instrument = ({buffer, name, setBuffers, toggleInstrument, selected}) => {
             if(channelSend[FxSend+name]){
                 channelSend[FxSend+name].gain.value = Fx[FxSend]
             }
-        })  
+        })   
         
     }, [Fx]) 
 

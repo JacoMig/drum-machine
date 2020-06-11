@@ -121,6 +121,11 @@ input[type=range].range-slider {
   
 }
 
+.fx-wrapper h4 { 
+  font-size: 1em;
+  font-weight: normal;
+}
+
 .fx-button {
   border-radius: 5px;
   border: 2px solid white;
@@ -135,6 +140,7 @@ input[type=range].range-slider {
   left: 0;
   z-index: 300;
   max-height: 300px;
+  width: 200px;
   overflow-y: auto;
 }
 
