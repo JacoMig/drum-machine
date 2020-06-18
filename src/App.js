@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <DrumMachine />
+      <p>Drum Machine made with <strong>Tonejs</strong> and <strong>React</strong></p>
     </div>
   );
 }
