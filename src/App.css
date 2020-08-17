@@ -75,7 +75,7 @@
 .instrument-rack {
   display: flex;
   justify-content: space-around;
-  height: 300px;
+  height: 275px;
 }
 
 .instrument {
@@ -105,7 +105,7 @@
 }
 .instrument .name {
   z-index: 200;
-  color: white;
+  color: black;
 }
 input[type=range].range-slider {
   z-index: 100;

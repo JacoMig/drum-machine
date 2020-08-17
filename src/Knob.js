@@ -1,5 +1,6 @@
 import React from 'react'
 import './knob.css'
+import { isTouchDevice } from './utils/util';
 
 class Knob extends React.Component {
     constructor(props) {
@@ -28,7 +29,14 @@ class Knob extends React.Component {
         y: knob.top + knob.height / 2
       };
       const moveHandler = e => {
-        this.currentDeg = this.getDeg(e.clientX, e.clientY, pts);
+        
+        if(isTouchDevice()){
+          this.currentDeg = this.getDeg(e.touches[0].clientX, e.touches[0].clientY, pts);
+        }else {
+          this.currentDeg = this.getDeg(e.clientX, e.clientY, pts);
+        }
+        console.log(e.touches[0].clientX)
+        /* this.currentDeg = this.getDeg(e.clientX, e.clientY, pts); */
         if (this.currentDeg === this.startAngle) this.currentDeg--;
         let newValue = Math.floor(
           this.convertRange(
@@ -40,12 +48,21 @@ class Knob extends React.Component {
           )
         );
         this.setState({ deg: this.currentDeg });
-        this.props.onChange(newValue);
+        this.props.onChange(newValue); 
       };
-      document.addEventListener("mousemove", moveHandler);
-      document.addEventListener("mouseup", e => {
-        document.removeEventListener("mousemove", moveHandler);
-      });
+
+      if(!isTouchDevice()){
+        document.addEventListener("mousemove", moveHandler);
+        document.addEventListener("mouseup", e => {
+          document.removeEventListener("mousemove", moveHandler);
+        });
+      }else {
+        
+        document.addEventListener("touchmove", moveHandler);
+        document.addEventListener("touchend", e => {
+          document.removeEventListener("touchmove", moveHandler);
+        });
+      }
     };
   
     getDeg = (cX, cY, pts) => {
@@ -126,7 +143,7 @@ class Knob extends React.Component {
                 ))
               : null}
           </div>
-          <div className="knob outer" style={oStyle} onMouseDown={this.startDrag}>
+          <div className="knob outer" style={oStyle} onTouchStart={this.startDrag} onMouseDown={this.startDrag}>
             <div className="knob inner" style={iStyle}>
               <div className="grip" />
             </div>
