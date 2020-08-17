@@ -60,7 +60,7 @@ const Controls = ({playStop, setPlayStop, setBpm, bpm, volume, setVolume, minVol
                     min={50} 
                     max={220} 
                     name="bpm" 
-                    onChange={(e) => setBpm(e.target.value)} />
+                    onChange={(e) => e.target.value <= 220 ? setBpm(e.target.value) : null } />
             </div>
         </div>
     )
